@@ -2,6 +2,7 @@ var module = require('./DBModule');
 var url = require('url');
 var querystring = require('querystring');
 var fs = require('fs');
+var zlib = require('zlib');
 // var zlib = require('zlib');
 
 exports.display_login = function(url,request,response){
@@ -104,4 +105,31 @@ exports.getImageResponse = function(request,response){
     }
     response.writeHead(200, {'Content-Type': 'image/jpg' });
     response.end(img, 'binary');
+}
+
+exports.download_book = function(request,response){
+    var query = url.parse(request.url).query;
+    var ebook = querystring.parse(query)["ebook"];
+    rstream = fs.createReadStream('./books/'+ebook);
+    wstream = fs.createWriteStream('D://books//'+ebook+'.gz');
+    var gzip = zlib.createGzip();
+    rstream.pipe(gzip).pipe(wstream).on('finish',function(){
+        console.log("Finished Compressing");
+        fs.readFile('./Details_Book.html', function (err, html) {
+            if (err) {
+                throw err;
+            }      
+                response.writeHeader(200, {"Content-Type": "text/html"}); 
+                response.write(html); 
+                response.write("<script type='text/javascript'>alert('Downloaded the zipped file,check in the D:/books directory');</script>");
+                response.end();
+        });
+    });
+}
+
+exports.view_book = function(request,response){
+    var query = url.parse(request.url).query;
+    var ebook = querystring.parse(query)["ebook"];
+    rstream = fs.createReadStream('./books/'+ebook);
+    rstream.pipe(response);
 }
