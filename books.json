@@ -1,0 +1,45 @@
+[
+
+   {
+
+ "isbnNo":"65421",
+
+  "name": "Node up and Running",
+
+  "imageUrl": "/node2.jpg",
+
+  "price":"Rs.550",
+
+  "ebookname":"node3.pdf"
+
+   },
+
+   {
+
+ "isbnNo":"87543",
+
+  "name": "NodeJS - Teach yourself",
+
+  "imageUrl": "/node1.jpg",
+
+  "price":"Rs.650",
+
+  "ebookname":"node2.pdf"
+
+   },
+
+    {
+
+ "isbnNo":"87543",
+
+  "name": "NodeJS in Action - Complete Reference",
+
+  "imageUrl": "/node3.jpg",
+
+  "price":"Rs.650",
+
+  "ebookname":"node1.pdf"
+
+   }
+
+]
