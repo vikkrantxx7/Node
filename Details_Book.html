@@ -4,6 +4,17 @@
 
 <title></title>
 
+<style>
+    .chatwindow{    
+        position: fixed;    
+        top: 0;    
+        right: 0;    
+        height:200;    
+        width:200;    
+        border:ridge;    
+    }    
+</style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -103,6 +114,26 @@ $(function(){
                 </form>
 
                 </center>
+                
+                <table class="chatwindow" style="background-color: aqua;">
+
+                    <tr><td>Chat with us for queries!</td></tr>
+    
+                    <tr><td>             
+    
+                    <form action="http://localhost:3000/chat">
+    
+                    Name:<input type="text" name="chatname"><br>
+    
+                    Enter the message:<input type="text" name="chatmessage"><br>
+    
+                    <input type="submit" value="send">
+    
+                    </form>
+    
+                    </td></tr>
+    
+                    </table>
 
 </body>
 

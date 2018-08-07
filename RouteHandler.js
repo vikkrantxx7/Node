@@ -3,7 +3,8 @@ var url = require('url');
 var querystring = require('querystring');
 var fs = require('fs');
 var zlib = require('zlib');
-// var zlib = require('zlib');
+var net=require('net');
+message="";
 
 exports.display_login = function(url,request,response){
     data1 = '';
@@ -132,4 +133,35 @@ exports.view_book = function(request,response){
     var ebook = querystring.parse(query)["ebook"];
     rstream = fs.createReadStream('./books/'+ebook);
     rstream.pipe(response);
+}
+
+exports.createChat = function(request,response){
+    var query = url.parse(request.url).query;
+    var chatmessage = querystring.parse(query)['chatmessage'];
+    var chatname = querystring.parse(query)['chatname'];
+    var client = net.connect({port:1234},function(){
+        console.log('Connected to server.');
+        client.write("<B>Name:</B>"+chatname);
+        client.write("<br><B>Message:</B>"+chatmessage);
+    });
+
+    client.on('data',function(data){
+        message += "<tr style=' border-bottom:ridge;'><td>"+data.toString()+"</td></tr>";
+        console.log(data.toString());
+        fs.readFile('./Details_Book.html', function (err, html) {
+            if (err) {
+                throw err;
+            }      
+            response.writeHeader(200, {"Content-Type": "text/html"}); 
+            response.write(html);
+            var chatresponse="<br><table style='border-collapse:collapse;background-color: #ffb3b3;border: ridge;width:300px;top:100;left:0;position: fixed;'><tr style=' border-bottom:ridge;'><td><h4>Discussion:</h4></td></tr>"+message+"</table>";
+            response.write(chatresponse);
+            response.end();
+        });
+    });
+
+    // client.end();
+    client.on('end', function() {
+        console.log('disconnected from server');      
+    });
 }

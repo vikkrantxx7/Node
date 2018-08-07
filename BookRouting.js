@@ -34,6 +34,9 @@ module.exports.enableRoute = function(url,request,response){
         case '/books/download':
             routeHandler.download_book(request,response);
             break;
+        case '/chat':
+            routeHandler.createChat(request, response);
+            break;
         default:
             routeHandler.display_home(pathname, request,response);
     }
