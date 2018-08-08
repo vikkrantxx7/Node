@@ -15,26 +15,44 @@ exports.display_login = function(url,request,response){
         qs = querystring.parse(data1);
         name = qs["username"];
         password = qs["password"];
-        result = module.authenticateUser(name,password);
-        if(result === "Valid User"){
-            fs.appendFile('./log.txt',"User "+name+" has logged in at "+new Date()+"\n",function(err,html){
-                if(err)
-                throw err;
-            });
-            fs.readFile('./Details_Book.html', function (err, html) {
-                if (err) {
-                            throw err;
-                        }      
-                response.writeHead(200, {"Content-Type": "text/html"}); 
-                response.write(html); 
-                response.end(); 
-            });
-        }else{
-            response.writeHead(200,{"Content-Type":"text/html"});
-            response.write(`<body bgcolor='#E2C2F6'><center>Invalid User try login Again!!</center>
-            <center><a href='home'>Back to Login</a></center></body>`);
-            response.end();
-        }
+        module.authenticateUser(name,password,response,function(err,data){
+            if(data === 'success'){
+                response.writeHead(200,{'Content-Type':'text/html'});
+                fs.readFile('./Details_Book.html',function(err,html){
+                    if (err) {
+                        throw(err);
+                    }
+                    response.writeHead(200,{'Content-Type':'text/html'});
+                    response.write(html);
+                    response.end();
+                });
+            } else {
+                console.log('error');
+                response.writeHead(200,{'Content-Type':'text/html'});
+                response.write("<body bgcolor='#E2C2F6'><center>Invalid User! Try login again!!</center></body>");
+                response.write("<center><a href='home'>Back to Login</a></center>");
+                response.end();
+            }
+        });
+//         if(result === "Valid User"){
+//             fs.appendFile('./log.txt',"User "+name+" has logged in at "+new Date()+"\n",function(err,html){
+//                 if(err)
+//                 throw err;
+//             });
+//             fs.readFile('./Details_Book.html', function (err, html) {
+//                 if (err) {
+//                             throw err;
+//                         }      
+//                 response.writeHead(200, {"Content-Type": "text/html"}); 
+//                 response.write(html); 
+//                 response.end(); 
+//             });
+//         }else{
+//             response.writeHead(200,{"Content-Type":"text/html"});
+//             response.write(`<body bgcolor='#E2C2F6'><center>Invalid User try login Again!!</center>
+//             <center><a href='home'>Back to Login</a></center></body>`);
+//             response.end();
+//         }
     });
 }
 
@@ -60,10 +78,18 @@ exports.display_register = function(url,request,response){
         confirmpassword = qs["confirmpassword"];
         address = qs["address"];
         if(password === confirmpassword){
-            result = module.addUser(name,password,address,response);
-            response.writeHead(200,{"Content-Type":"text/html"});
-            response.write("<body bgcolor='#E2C2F6'><center>"+result+"</center></body>");
-            response.write("<center><a href='home'>Click here to Login</a></center>");            
+            console.log('Confirmed password');
+            module.addUser(name,password,address,response,function(err,data){
+                if(data){
+                    response.writeHead(200,{'Content-Type':'text/html'});
+                    response.write("<body bgcolor='#E2C2F6'><center>Registered successfully!!</center></body>");
+                    response.write("<center><a href='home'>Click here to Login</a></center>");
+                    // response.end();
+                }
+            });
+            // response.writeHead(200,{"Content-Type":"text/html"});
+            // response.write("<body bgcolor='#E2C2F6'><center>"+result+"</center></body>");
+            // response.write("<center><a href='home'>Click here to Login</a></center>");            
         } else {
             response.writeHead(200,{"Content-Type":"text/html"});
             response.write("<body bgcolor='#E2C2F6'><center>Password doenot match with confirm password!!</center></body>");

@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "mongojs": "^2.6.0",
+        "restler": "^3.4.0"
+    }
+}
