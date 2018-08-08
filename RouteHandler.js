@@ -17,7 +17,7 @@ exports.display_login = function(url,request,response){
         password = qs["password"];
         result = module.authenticateUser(name,password);
         if(result === "Valid User"){
-            fs.appendFile('./log.txt',"User "+name+" has logged in at "+new Date(),function(err,html){
+            fs.appendFile('./log.txt',"User "+name+" has logged in at "+new Date()+"\n",function(err,html){
                 if(err)
                 throw err;
             });
